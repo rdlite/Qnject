@@ -14,17 +14,6 @@ namespace Qnject
             ResolveScene();
         }
 
-        private void OnDestroy()
-        {
-            UnloadLocalDependencies();
-        }
-
-        protected void UnloadLocalDependencies()
-        {
-            MonoObjectsResolver.UnregisterContainer(_container);
-            _container.Clear();
-        }
-
         private void ResolveScene()
         {
             MonoObjectsResolver.ResolveCurrentScene();

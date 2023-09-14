@@ -19,11 +19,11 @@ namespace Qnject
             {
                 foreach (var item in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects()[i].transform.GetComponentsInChildren<MonoBehaviour>())
                 {
-                    MonoBehaviour[] monobesh = item.GetComponents<MonoBehaviour>();
+                    MonoBehaviour[] monobehs = item.GetComponents<MonoBehaviour>();
 
-                    if (monobesh != null && monobesh.Length > 0)
+                    if (monobehs != null && monobehs.Length > 0)
                     {
-                        foreach (var monoObject in monobesh)
+                        foreach (var monoObject in monobehs)
                         {
                             ResolveObject(monoObject);
                         }

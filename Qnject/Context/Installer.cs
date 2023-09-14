@@ -28,5 +28,16 @@ namespace Qnject
         }
 
         public abstract void Bind();
+
+        private void OnDestroy()
+        {
+            UnloadLocalDependencies();
+        }
+
+        protected void UnloadLocalDependencies()
+        {
+            MonoObjectsResolver.UnregisterContainer(_container);
+            _container.Clear();
+        }
     }
 }

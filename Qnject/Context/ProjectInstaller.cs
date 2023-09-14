@@ -15,16 +15,5 @@ namespace Qnject
         }
 
         public override void Bind() {}
-
-        private void OnDestroy()
-        {
-            UnloadLocalDependencies();
-        }
-
-        protected void UnloadLocalDependencies()
-        {
-            MonoObjectsResolver.UnregisterContainer(_container);
-            _container.Clear();
-        }
     }
 }
