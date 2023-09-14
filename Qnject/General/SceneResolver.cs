@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 
 namespace Qnject
 {
@@ -25,22 +26,50 @@ namespace Qnject
                     {
                         foreach (var monoComponent in monobesh)
                         {
-                            ResolveObject(monoComponent);
+                            ResolveFields(monoComponent);
+                            ResolveMethods(monoComponent);
                         }
                     }
                 }
             }
         }
+        
+        private static void ResolveMethods(MonoBehaviour target)
+        {
+            Type targetType = target.GetType();
+            MethodInfo[] methods = targetType.GetMethods(bindingAttrs);
 
-        private static void ResolveObject(MonoBehaviour target)
+            foreach (MethodInfo method in methods)
+            {
+                foreach (Attribute attribute in method.GetCustomAttributes())
+                {
+                    if (attribute is not Inject)
+                    {
+                        continue;
+                    }
+
+                    int it = 0;
+                    object[] parameters = new object[method.GetParameters().Length];
+
+                    foreach (var parameter in method.GetParameters())
+                    {
+                        parameters[it] = TryGetObjFromContainers(parameter.ParameterType);
+                        it++;
+                    }
+
+                    method.Invoke(target, parameters);
+                }
+            }
+        }
+
+        private static void ResolveFields(MonoBehaviour target)
         {
             Type targetType = target.GetType();
             FieldInfo[] fields = targetType.GetFields(bindingAttrs);
 
             foreach (FieldInfo fi in fields)
             {
-                IEnumerable<Attribute> attributes = fi.GetCustomAttributes();
-                foreach (Attribute attribute in attributes)
+                foreach (Attribute attribute in fi.GetCustomAttributes())
                 {
                     if (attribute is not Inject)
                     {
