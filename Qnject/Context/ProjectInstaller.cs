@@ -2,17 +2,19 @@ using UnityEngine;
 
 namespace Qnject
 {
-    [DefaultExecutionOrder(-120)]
-    public abstract class SceneInstaller : Installer
+    [DefaultExecutionOrder(-130)]
+    public abstract class ProjectInstaller : Installer
     {
         protected override void Awake()
         {
-            ContextsCreator.TryCreateProjectContextFromResources();
-
             base.Awake();
 
-            ResolveScene();
+            gameObject.name = "[ProjectContext]";
+
+            DontDestroyOnLoad(gameObject);
         }
+
+        public override void Bind() {}
 
         private void OnDestroy()
         {
@@ -23,11 +25,6 @@ namespace Qnject
         {
             MonoObjectsResolver.UnregisterContainer(_container);
             _container.Clear();
-        }
-
-        private void ResolveScene()
-        {
-            MonoObjectsResolver.ResolveCurrentScene();
         }
     }
 }

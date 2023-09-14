@@ -54,7 +54,6 @@ namespace Qnject
 
         public void BindNonSingle<T>(T value)
         {
-
             GetDependency<T>().Add(value);
         }
 
@@ -64,7 +63,7 @@ namespace Qnject
 
             foreach (T value in collection)
             {
-                GetDependency<T>().Add(value);
+                GetDependency(value.GetType()).Add(value);
             }
         }
 
